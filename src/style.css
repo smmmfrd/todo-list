@@ -32,3 +32,18 @@ body{
 .modal{
     margin: 4rem auto;
 }
+
+#task-display{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    gap: 1rem;
+}
+
+.card{
+    display: flex;
+    background-color: #EEE;
+    border: 1px solid #EEE;
+    border-radius: 15px;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
