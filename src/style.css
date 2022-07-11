@@ -5,3 +5,7 @@
 body{
     background-color: #BEEEEF;
 }
+
+.modal{
+    margin: 4rem auto;
+}
