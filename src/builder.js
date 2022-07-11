@@ -1,6 +1,6 @@
 import { tasks, addTask } from "./tasks";
 
-export function buildModal(){
+function buildModal(){
     let modal = document.createElement('dialog');
     modal.classList.add('modal');
 
@@ -15,9 +15,12 @@ export function buildModal(){
     nameLabel.setAttribute('for', 'name');
     nameLabel.innerHTML = 'Name :';
     inputs.appendChild(nameLabel);
+
     let nameInput = document.createElement('input');
     nameInput.type = 'text';
     nameInput.id = 'name';
+    nameInput.classList.add('input');
+    nameInput.value = '';
     inputs.appendChild(nameInput);
 
     modal.appendChild(inputs);
@@ -31,12 +34,7 @@ export function buildModal(){
     submitButton.textContent = 'Add';
     modal.appendChild(submitButton);
 
-    content.appendChild(modal);
-
-    let showButton = document.createElement('button');
-    showButton.addEventListener('click', () => modal.showModal());
-    showButton.textContent = 'Add Task';
-    content.appendChild(showButton);
+    return modal;
 }
 
 function buildTaskCard(task, parentElement){
@@ -46,17 +44,45 @@ function buildTaskCard(task, parentElement){
     parentElement.appendChild(card);
 }
 
-export function displayTasks(){
+function displayTasks(){
     var taskDisplay = document.querySelector('#task-display');
-    if(taskDisplay === null){
-        taskDisplay = document.createElement('div');
-        taskDisplay.id = 'task-display';
-    }
     while(taskDisplay.firstChild){
         taskDisplay.removeChild(taskDisplay.firstChild);
     }
 
     tasks.forEach((task) => {buildTaskCard(task, taskDisplay)});
+}
 
-    content.appendChild(taskDisplay);
+export function buildPage(){
+    let nav = document.createElement('div');
+    nav.id = 'nav';
+
+    content.appendChild(nav);
+
+    let modal = buildModal();
+    content.appendChild(modal);
+
+    let projectContent = document.createElement('div');
+    projectContent.id = 'project-content';
+
+    let taskCreator = document.createElement('div');
+    taskCreator.id = 'task-creator';
+    
+    let openModalButton = document.createElement('button');
+    openModalButton.addEventListener('click', () => {
+        // clear inputs
+        [...modal.getElementsByClassName('input')].forEach(i => i.value = '');
+        modal.showModal();
+    });
+    openModalButton.textContent = 'Add Task';
+    taskCreator.appendChild(openModalButton);
+    projectContent.appendChild(taskCreator);
+
+    let taskDisplay = document.createElement('div');
+    taskDisplay.id = 'task-display';
+    projectContent.appendChild(taskDisplay);
+
+    content.appendChild(projectContent);
+
+    displayTasks();
 }

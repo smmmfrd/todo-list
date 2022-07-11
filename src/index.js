@@ -1,6 +1,5 @@
-import { buildModal, displayTasks } from './builder';
+import { buildPage } from './builder';
 import './style.css';
 const content = document.querySelector('#content');
 
-buildModal();
-displayTasks();
+buildPage();

@@ -1,9 +1,32 @@
+:root{
+    --nav-bgc: #DDD;
+}
+
 *{
     margin: 0;
 }
 
+html, body{
+    height: 100%;
+}
+
 body{
     background-color: #BEEEEF;
+}
+
+#content{
+    height: 100%;
+    display: grid;
+    grid-template-columns: 30% 1fr;
+}
+
+#nav{
+    background-color: var(--nav-bgc);
+    height: 100%;
+}
+
+#task-creator{
+    background-color: aquamarine;
 }
 
 .modal{
