@@ -1,7 +1,8 @@
 export var tasks = [];
 
 const Task = (title, description) => {
-    return {title, description};
+    let completed = false;
+    return {title, description, completed};
 }
 
 export function addTask(title, description){

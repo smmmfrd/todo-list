@@ -41,9 +41,18 @@ body{
 
 .card{
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     background-color: #EEE;
     border: 1px solid #EEE;
     border-radius: 15px;
     padding: 1rem;
     font-size: 1.1rem;
+}
+
+.card > input[type='checkbox']{
+    /* pointer-events: none; */
+    height: 1rem;
+    width: 1rem;
 }

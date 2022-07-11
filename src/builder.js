@@ -41,7 +41,7 @@ function buildInputModal(){
     let submitButton = document.createElement('button');
     submitButton.addEventListener('click', () =>{
         addTask(nameInput.querySelector('.input').value, descriptionInput.querySelector('.input').value);
-        fillTaskHolder();
+        refreshTaskHolder();
         modal.close();
     });
     submitButton.textContent = 'Add';
@@ -51,6 +51,9 @@ function buildInputModal(){
 }
 
 function DisplayModal(){
+
+    let currentTask;
+
     let modal = document.createElement('dialog');
     modal.classList.add('modal');
     modal.id = 'task-modal';
@@ -66,25 +69,49 @@ function DisplayModal(){
     let descDisplay = document.createElement('p');
     modal.appendChild(descDisplay);
 
+    let completeButton = document.createElement('button');
+    completeButton.addEventListener('click', () =>{
+        currentTask.completed = !currentTask.completed;
+        display(currentTask);
+        refreshTaskHolder();
+    })
+    modal.appendChild(completeButton);
+
     const display = (task) => {
-        modal.showModal();
+        if(!modal.open){
+            modal.showModal();
+        }
         titleDisplay.textContent = `${task.title}`;
         descDisplay.textContent = `${task.description}`;
+
+        currentTask = task;
+        completeButton.textContent = task.completed ? 'MARK UNCOMPLETED' : 'MARK COMPLETED';
     }
     return {modal, display};
 }
 
 function buildTaskCard(task, parentElement){
     let card = document.createElement('div');
+
     card.classList.add('card');
     card.textContent = `${task.title}`;
     card.addEventListener('click', () => {
         taskDisplayModal.display(task);
     });
+
+    let completedDisplay = document.createElement('input');
+    completedDisplay.type = 'checkbox';
+    completedDisplay.checked = task.completed;
+    completedDisplay.onclick = (e) => {
+        task.completed = !task.completed;
+        e.stopPropagation();        
+    }
+    card.appendChild(completedDisplay);
+
     parentElement.appendChild(card);
 }
 
-function fillTaskHolder(){
+function refreshTaskHolder(){
     var taskDisplay = document.querySelector('#task-display');
     while(taskDisplay.firstChild){
         taskDisplay.removeChild(taskDisplay.firstChild);
@@ -128,5 +155,5 @@ export function buildPage(){
 
     content.appendChild(projectContent);
 
-    fillTaskHolder();
+    refreshTaskHolder();
 }
