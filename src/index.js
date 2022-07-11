@@ -1,6 +1,20 @@
 import './style.css';
 const content = document.querySelector('#content');
 
+var tasks = [];
+
+const Task = (title) => {
+
+    const buildCard = parentElement => {
+        let card = document.createElement('div');
+        card.classList.add('card');
+        card.textContent = `${title}`;
+        parentElement.appendChild(card);
+    }
+    return {title, buildCard};
+}
+
+
 function buildModal(){
     let modal = document.createElement('dialog');
     modal.classList.add('modal');
@@ -25,7 +39,9 @@ function buildModal(){
 
     let submitButton = document.createElement('button');
     submitButton.addEventListener('click', () =>{
-        console.log(`heyo`);
+        tasks.push(Task(nameInput.value));
+        displayTasks();
+        modal.close();
     });
     submitButton.textContent = 'Add';
     modal.appendChild(submitButton);
@@ -38,4 +54,23 @@ function buildModal(){
     content.appendChild(showButton);
 }
 
+function displayTasks(){
+    var taskDisplay = document.querySelector('#task-display');
+    if(taskDisplay === null){
+        taskDisplay = document.createElement('div');
+        taskDisplay.id = 'task-display';
+    }
+    while(taskDisplay.firstChild){
+        taskDisplay.removeChild(taskDisplay.firstChild);
+    }
+
+    tasks.forEach((task) => {task.buildCard(taskDisplay)});
+
+    content.appendChild(taskDisplay);
+}
+
 buildModal();
+
+tasks.push(Task('brush teeth'));
+
+displayTasks();
