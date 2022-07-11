@@ -63,9 +63,13 @@ function DisplayModal(){
     let titleDisplay = document.createElement('h1');
     modal.appendChild(titleDisplay);
 
+    let descDisplay = document.createElement('p');
+    modal.appendChild(descDisplay);
+
     const display = (task) => {
         modal.showModal();
         titleDisplay.textContent = `${task.title}`;
+        descDisplay.textContent = `${task.description}`;
     }
     return {modal, display};
 }
