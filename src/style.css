@@ -25,6 +25,33 @@ body{
     height: 100%;
 }
 
+.project-nav{
+    text-align: center;
+    background-color: aquamarine;
+    border: 1px solid aquamarine;
+    border-radius: 15px;
+    padding: 0.1rem;
+    user-select: none;
+}
+.project-nav:hover{
+    background-color: rgb(195, 252, 233);
+    border: 1px solid rgb(195, 252, 233);
+}
+
+#create-project{
+    margin-top: 1rem;
+    padding: .2rem;
+    background-color: rgb(196, 196, 196);
+    border: 1px solid rgb(196, 196, 196);
+    border-radius: 15px;
+
+    text-align: center;
+}
+#create-project:hover{
+    background-color: #fff;
+    border: 1px solid #fff;
+}
+
 #task-creator{
     background-color: aquamarine;
 }

@@ -1,5 +1,4 @@
 export var tasks = [];
-
 const Task = (title, description) => {
     let completed = false;
     return {title, description, completed};
@@ -8,18 +7,26 @@ const Task = (title, description) => {
 export function addTask(title, description){
     tasks.push(Task(title, description));
 }
+// localStorage.clear();
+export var currentProject = 'daily';
 
-if(localStorage.getItem('today') === null){
-    tasks.push(Task('Brush Teeth', 'Scrub those teefers clean.'));
-    tasks.push(Task('Apply Deodorant', 'You\'re and adult.'));
-    tasks.push(Task('Morning Sudoku', 'Get that brain started.'));
-    tasks.push(Task('Work Out', 'Yea, I work out.'));
-    
-    saveCurrentTasks('today');
-} else {
-    tasks = JSON.parse(localStorage.getItem('today'));
+if(localStorage.getItem('projects') === null){
+    localStorage.setItem('projects', 'daily,weekly');
 }
+loadTasks(currentProject);
 
 export function saveCurrentTasks(){
-    localStorage.setItem('today', JSON.stringify(tasks));
+    console.log('saving');
+    localStorage.setItem(currentProject, JSON.stringify(tasks));
+}
+
+export function loadTasks(projectName){
+    currentProject = projectName;
+    tasks = JSON.parse(localStorage.getItem(projectName));
+    if(tasks === null) tasks = [];
+    // if(localStorage.getItem(projectName) === null) {
+    //     tasks = [];
+    // } else {
+        
+    // }
 }

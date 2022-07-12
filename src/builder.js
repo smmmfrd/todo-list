@@ -1,4 +1,4 @@
-import { tasks, addTask, saveCurrentTasks } from "./tasks";
+import { tasks, currentProject, addTask, saveCurrentTasks, loadTasks } from "./tasks";
 
 var taskDisplayModal;
 
@@ -41,7 +41,7 @@ function buildInputModal(){
     let submitButton = document.createElement('button');
     submitButton.addEventListener('click', () =>{
         addTask(nameInput.querySelector('.input').value, descriptionInput.querySelector('.input').value);
-        refreshTaskHolder();
+        refreshTaskHolder(true);
         modal.close();
     });
     submitButton.textContent = 'Add';
@@ -112,27 +112,57 @@ function buildTaskCard(task, parentElement){
     parentElement.appendChild(card);
 }
 
-function refreshTaskHolder(){
+function refreshTaskHolder(save = false){
     var taskDisplay = document.querySelector('#task-display');
     while(taskDisplay.firstChild){
         taskDisplay.removeChild(taskDisplay.firstChild);
     }
 
-    tasks.forEach((task) => {buildTaskCard(task, taskDisplay)});
+    if(tasks.length > 0) tasks.forEach((task) => {buildTaskCard(task, taskDisplay)});
 
-    saveCurrentTasks();
+    if(save) saveCurrentTasks();
+}
+
+function buildProjectNav(){
+    let nav = document.createElement('div');
+    nav.id = 'nav';
+    let projects = localStorage.getItem('projects').split(',');
+
+    for(let i = 0; i < projects.length; i++){
+        let div = document.createElement('div');
+        div.textContent = projects[i].toUpperCase();
+        div.classList.add('project-nav');
+
+        div.addEventListener('click', () => {
+            console.log(projects[i]);
+            changeProjectTo(projects[i]);
+        });
+
+        nav.appendChild(div);
+    }
+
+    let createProjectButton = document.createElement('div');
+    createProjectButton.textContent = '+ Create Project';
+    createProjectButton.id = 'create-project';
+
+    createProjectButton.addEventListener('click', () => {
+        log('need a modal!');
+    });
+
+    nav.appendChild(createProjectButton);
+
+    return nav;
+}
+
+function changeProjectTo(project){
+    document.getElementById('project-name').textContent = project.toUpperCase();
+    loadTasks(project);
+    refreshTaskHolder();
 }
 
 export function buildPage(){
-    let nav = document.createElement('div');
-    nav.id = 'nav';
+    content.appendChild(buildProjectNav());
 
-    content.appendChild(nav);
-
-    let inputModal = buildInputModal();
-    content.appendChild(inputModal);
-
-    // console.log(displayModal());
     taskDisplayModal = DisplayModal();
     content.appendChild(taskDisplayModal.modal);
 
@@ -141,7 +171,14 @@ export function buildPage(){
 
     let taskCreator = document.createElement('div');
     taskCreator.id = 'task-creator';
-    
+
+    let projectNameDiv = document.createElement('div');
+    projectNameDiv.textContent = currentProject.toUpperCase();
+    projectNameDiv.id = 'project-name'
+    taskCreator.appendChild(projectNameDiv);
+
+    let inputModal = buildInputModal();
+    content.appendChild(inputModal);
     let openInputModalButton = document.createElement('button');
     openInputModalButton.addEventListener('click', () => {
         // clear inputs
