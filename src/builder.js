@@ -1,4 +1,4 @@
-import { tasks, addTask } from "./tasks";
+import { tasks, addTask, saveCurrentTasks } from "./tasks";
 
 var taskDisplayModal;
 
@@ -104,6 +104,7 @@ function buildTaskCard(task, parentElement){
     completedDisplay.checked = task.completed;
     completedDisplay.onclick = (e) => {
         task.completed = !task.completed;
+        saveCurrentTasks();
         e.stopPropagation();        
     }
     card.appendChild(completedDisplay);
@@ -118,6 +119,8 @@ function refreshTaskHolder(){
     }
 
     tasks.forEach((task) => {buildTaskCard(task, taskDisplay)});
+
+    saveCurrentTasks();
 }
 
 export function buildPage(){
