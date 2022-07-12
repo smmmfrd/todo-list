@@ -10,6 +10,12 @@ export function addTask(title, description){
 // localStorage.clear();
 export var currentProject = 'daily';
 
+export function addProject(projectName){
+    let projects = localStorage.getItem('projects');
+    projects += `,${projectName}`;
+    localStorage.setItem('projects', projects);
+}
+
 if(localStorage.getItem('projects') === null){
     localStorage.setItem('projects', 'daily,weekly');
 }

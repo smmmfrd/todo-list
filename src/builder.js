@@ -1,6 +1,7 @@
-import { tasks, currentProject, addTask, saveCurrentTasks, loadTasks } from "./tasks";
+import { tasks, currentProject, addProject, addTask, saveCurrentTasks, loadTasks } from "./tasks";
 
 var taskDisplayModal;
+var createProjectModal;
 
 function modalInput(label){
     let input = document.createElement('div');
@@ -123,30 +124,69 @@ function refreshTaskHolder(save = false){
     if(save) saveCurrentTasks();
 }
 
-function buildProjectNav(){
-    let nav = document.createElement('div');
-    nav.id = 'nav';
-    let projects = localStorage.getItem('projects').split(',');
+function ProjectModal(){
+    let modal = document.createElement('dialog');
+    modal.classList.add('modal');
 
-    for(let i = 0; i < projects.length; i++){
+    let closeButton = document.createElement('button');
+    closeButton.addEventListener('click', () => modal.close());
+    closeButton.textContent = 'close';
+    modal.appendChild(closeButton);
+
+    let projectName = document.createElement('input');
+    projectName.type = 'text';
+    modal.appendChild(projectName);
+
+    let addButton = document.createElement('button');
+    addButton.addEventListener('click', () =>{
+        addProject(projectName.value);
+        refreshProjectsList();
+        modal.close();
+    });
+    addButton.textContent = 'Create Project';
+    modal.appendChild(addButton);
+
+    return modal;
+}
+
+function refreshProjectsList(){
+    let holder = document.querySelector('#projects-list');
+    while(holder.firstChild) {
+        holder.removeChild(holder.firstChild);
+    }
+
+    let projectNames = localStorage.getItem('projects').split(',');
+
+    for(let i = 0; i < projectNames.length; i++){
         let div = document.createElement('div');
-        div.textContent = projects[i].toUpperCase();
+        div.textContent = projectNames[i].toUpperCase();
         div.classList.add('project-nav');
 
         div.addEventListener('click', () => {
-            console.log(projects[i]);
-            changeProjectTo(projects[i]);
+            console.log(projectNames[i]);
+            changeProjectTo(projectNames[i]);
         });
 
-        nav.appendChild(div);
+        holder.appendChild(div);
     }
+}
+
+
+function buildProjectNav(){
+
+    let nav = document.createElement('div');
+    nav.id = 'nav';
+
+    let projectsList = document.createElement('div');
+    projectsList.id = 'projects-list';
+    nav.appendChild(projectsList);
 
     let createProjectButton = document.createElement('div');
     createProjectButton.textContent = '+ Create Project';
     createProjectButton.id = 'create-project';
 
     createProjectButton.addEventListener('click', () => {
-        log('need a modal!');
+        createProjectModal.showModal();
     });
 
     nav.appendChild(createProjectButton);
@@ -161,6 +201,8 @@ function changeProjectTo(project){
 }
 
 export function buildPage(){
+    createProjectModal = ProjectModal();
+    content.appendChild(createProjectModal);
     content.appendChild(buildProjectNav());
 
     taskDisplayModal = DisplayModal();
@@ -195,5 +237,6 @@ export function buildPage(){
 
     content.appendChild(projectContent);
 
+    refreshProjectsList();
     refreshTaskHolder();
 }
