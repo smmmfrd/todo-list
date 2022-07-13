@@ -74,7 +74,7 @@ function DisplayModal(){
     completeButton.addEventListener('click', () =>{
         currentTask.completed = !currentTask.completed;
         display(currentTask);
-        refreshTaskHolder();
+        refreshTaskHolder(true);
     })
     modal.appendChild(completeButton);
 
